@@ -1,0 +1,26 @@
+directive @namespace(name: String) on SCHEMA
+
+schema @namespace(name: "wascc:keyvalue") {
+  query: Query
+  mutation: Mutation
+}
+
+"Signed 32-bit integers"
+scalar I32
+
+"Query represents all data retrieval operations."
+type Query {
+  "Satify the linter with a dummy"
+  dummy: Boolean!
+}
+
+"Mutation represents all the functions supported."
+type Mutation {
+  "Sets a key"
+  Set(key: String!, value: String!, expires_s: I32!): SetResponse!
+}
+
+"Response to a set request"
+type SetResponse {
+    value: String!
+}
