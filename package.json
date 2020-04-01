@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "wapc-guest-as": "git+https://github.com/wapc/wapc-guest-as#v0.2.0",
-    "as-msgpack": "git+https://github.com/wapc/as-msgpack#v0.1.4"
+    "as-msgpack": "git+https://github.com/wapc/as-msgpack#v0.1.5"
   },
   "devDependencies": {
     "graphql-schema-linter": "^0.2.0",
