@@ -1,4 +1,5 @@
 directive @namespace(name: String) on SCHEMA
+directive @operation(name: String) on FIELD_DEFINITION
 
 schema @namespace(name: "wascc:keyvalue") {
   query: Query
@@ -17,7 +18,7 @@ type Query {
 "Mutation represents all the functions supported."
 type Mutation {
   "Sets a key"
-  Set(key: String!, value: String!, expires_s: I32!): SetResponse!
+  set(key: String!, value: String!, expires_s: I32!): SetResponse! @operation(name: "Set")
 }
 
 "Response to a set request"

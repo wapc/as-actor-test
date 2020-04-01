@@ -1,5 +1,6 @@
 directive @namespace(name: String) on SCHEMA
 directive @unary on FIELD_DEFINITION
+directive @operation(name: String) on FIELD_DEFINITION
 directive @map on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
 schema @namespace(name: "wascc:httpclient") {
@@ -21,7 +22,7 @@ type Query {
 "Mutation represents all the functions supported."
 type Mutation {
   "Handles an HTTP request"
-  HandleRequest(person: Request!): Response! @unary
+  handleRequest(person: Request!): Response! @unary @operation(name: "HandleRequest")
 }
 
 "Represents an HTTP response that the guest module would like to return in response to a request command"
