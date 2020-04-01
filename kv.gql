@@ -10,7 +10,7 @@ scalar I32
 
 "Query represents all data retrieval operations."
 type Query {
-  "Satify the linter with a dummy"
+  "Satisfy the linter with a dummy"
   dummy: Boolean!
 }
 

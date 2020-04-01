@@ -32,8 +32,8 @@ input Request {
   path: String!
   "The raw query string."
   query_string: String!
-  "The HTTP request headers."
-  header: [HeaderInput!]! @map
+  #"The HTTP request headers."
+  #header: [HeaderInput!]! @map
   "Happiness"
   body: Bytes!
 }
@@ -52,8 +52,8 @@ type Response {
   status_code: U32!
   "The HTTP status name."
   status: String!
-  "The HTTP request headers."
-  header: [Header!]! @map
+  #"The HTTP request headers."
+  #header: [Header!]! @map
   "Happiness"
   body: Bytes!
 }
