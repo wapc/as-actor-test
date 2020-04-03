@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "wapc-guest-as": "git+https://github.com/wapc/wapc-guest-as#v0.2.0",
-    "as-msgpack": "git+https://github.com/wapc/as-msgpack#v0.1.5"
+    "as-msgpack": "git+https://github.com/wapc/as-msgpack#v0.1.6"
   },
   "devDependencies": {
     "prettier": "^2.0.2",

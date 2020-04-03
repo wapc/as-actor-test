@@ -23,9 +23,9 @@ type Request {
 "Represents an HTTP response that the guest module would like to return in response to a request command."
 type Response {
   "The HTTP status code."
-  statusCode: u32
+  statusCode: u32 = 200
   "The HTTP status name."
-  status: string
+  status: string = "OK"
   "The HTTP request headers."
   header: {string : string}?
   "Happiness"
