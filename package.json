@@ -4,39 +4,22 @@
   "description": " todo ",
   "main": "index.js",
   "scripts": {
-    "graphql-lint": "graphql-schema-linter",
-    "gql2as": "wapc-gql2as schema.gql > assembly/module.ts && prettier --write assembly/module.ts",
-    "kv": "wapc-gql2as kv.gql > assembly/kv.ts && prettier --write assembly/kv.ts",
-    "codegen": "npm run graphql-lint && npm run gql2as",
+    "http": "widl2as http.widl > assembly/http.ts && prettier --write assembly/http.ts",
+    "kv": "widl2as kv.widl > assembly/kv.ts && prettier --write assembly/kv.ts",
+    "codegen": "npm run http && npm run kv",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "asc assembly/index.ts -b build/module.wasm --use abort=assembly/module/abort --validate --optimize",
+    "build": "asc assembly/index.ts -b build/module.wasm --use abort=assembly/index/abort --validate --optimize",
     "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --debug",
     "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
   },
   "author": "",
   "license": "ISC",
-  "graphql-schema-linter": {
-    "rules": [
-      "deprecations-have-a-reason",
-      "enum-values-all-caps",
-      "enum-values-have-descriptions",
-      "enum-values-sorted-alphabetically",
-      "fields-have-descriptions",
-      "input-object-values-have-descriptions",
-      "types-are-capitalized",
-      "types-have-descriptions"
-    ],
-    "schemaPaths": [
-      "schema.gql"
-    ]
-  },
   "dependencies": {
     "wapc-guest-as": "git+https://github.com/wapc/wapc-guest-as#v0.2.0",
     "as-msgpack": "git+https://github.com/wapc/as-msgpack#v0.1.5"
   },
   "devDependencies": {
-    "graphql-schema-linter": "^0.2.0",
     "prettier": "^2.0.2",
     "assemblyscript": "^0.9.4"
   }

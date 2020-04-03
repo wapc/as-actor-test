@@ -1,5 +1,5 @@
-import { handleCall, consoleLog } from "wapc-guest-as";
-import { Request, Response, ResponseBuilder, Handlers } from "./module";
+import { handleCall, handleAbort, consoleLog } from "wapc-guest-as";
+import { Request, Response, ResponseBuilder, Handlers } from "./http";
 import { Host as KV } from "./kv";
 
 export function _start(): void {
@@ -20,10 +20,21 @@ function handleRequest(request: Request): Response {
   return new ResponseBuilder()
     .withStatusCode(200)
     .withStatus("OK")
+    .withHeader(request.header)
     .withBody(payload)
     .build();
 }
 
 export function __guest_call(operation_size: usize, payload_size: usize): bool {
   return handleCall(operation_size, payload_size);
+}
+
+// Abort function
+function abort(
+  message: string | null,
+  fileName: string | null,
+  lineNumber: u32,
+  columnNumber: u32
+): void {
+  handleAbort(message, fileName, lineNumber, columnNumber);
 }
