@@ -1,6 +1,6 @@
 namespace "wascc:HttpClient"
 
-"Mutation represents all the functions supported."
+"The supported operations."
 interface {
   "Handles an HTTP request"
   handleRequest{person: Request}: Response @operation(name: "HandleRequest")

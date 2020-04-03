@@ -1,6 +1,6 @@
 namespace "wascc:keyvalue"
 
-"represents all the functions supported."
+"The supported operations."
 interface {
   "Sets a key"
   set(key: string, value: string, expires: i32): SetResponse @operation(name: "Set")
