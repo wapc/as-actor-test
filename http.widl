@@ -15,7 +15,7 @@ type Request {
   "The raw query string."
   queryString: string
   "The HTTP request headers."
-  header: {string : string}?
+  header: {string : string}
   "Happiness"
   body: bytes
 }
@@ -27,7 +27,7 @@ type Response {
   "The HTTP status name."
   status: string = "OK"
   "The HTTP request headers."
-  header: {string : string}?
+  header: {string : string}
   "Happiness"
   body: bytes
 }

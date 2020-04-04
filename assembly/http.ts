@@ -31,7 +31,6 @@ export class Host {
       "HandleRequest",
       person.toBuffer()
     );
-
     const decoder = new Decoder(payload);
     return Response.decode(decoder);
   }
@@ -49,11 +48,9 @@ export class Handlers {
 var handleRequestHandler: (person: Request) => Response;
 function handleRequestWrapper(payload: ArrayBuffer): ArrayBuffer {
   const decoder = new Decoder(payload);
-
   const request = new Request();
   request.decode(decoder);
   const response = handleRequestHandler(request);
-
   return response.toBuffer();
 }
 
@@ -71,7 +68,7 @@ export class Request {
   queryString: string;
 
   // The HTTP request headers.
-  header: Map<string, string> | null;
+  header: Map<string, string>;
 
   // Happiness
   body: ArrayBuffer;
@@ -80,6 +77,7 @@ export class Request {
     this.method = "";
     this.path = "";
     this.queryString = "";
+    this.header = new Map<string, string>();
     this.body = new ArrayBuffer(0);
   }
 
@@ -107,17 +105,14 @@ export class Request {
       } else if (field == "queryString") {
         this.queryString = decoder.readString();
       } else if (field == "header") {
-        if (decoder.isNextNil()) {
-          this.header = null;
-        } else {
-          const mapSize = decoder.readMapSize();
-          this.header = new Map<string, string>();
-          for (let i: u32 = 0; i < mapSize; i++) {
-            const key = decoder.readString();
-            const value = decoder.readString();
-            this.header.set(key, value);
+        this.header = decoder.readMap(
+          (decoder: Decoder): string => {
+            return decoder.readString();
+          },
+          (decoder: Decoder): string => {
+            return decoder.readString();
           }
-        }
+        );
       } else if (field == "body") {
         this.body = decoder.readByteArray();
       } else {
@@ -135,19 +130,15 @@ export class Request {
     sizer.writeString("queryString");
     sizer.writeString(this.queryString);
     sizer.writeString("header");
-    if (this.header === null) {
-      sizer.writeNil();
-    } else {
-      const headerMap = this.header!;
-      sizer.writeMapSize(headerMap.size);
-      const headerKeys = headerMap.keys();
-      for (let i: i32 = 0; i < headerKeys.length; i++) {
-        const key = headerKeys[i];
-        const value = headerMap.get(key);
+    sizer.writeMap(
+      this.header,
+      (sizer: Sizer, key: string): void => {
         sizer.writeString(key);
+      },
+      (sizer: Sizer, value: string): void => {
         sizer.writeString(value);
       }
-    }
+    );
     sizer.writeString("body");
     sizer.writeByteArray(this.body);
   }
@@ -161,19 +152,15 @@ export class Request {
     encoder.writeString("queryString");
     encoder.writeString(this.queryString);
     encoder.writeString("header");
-    if (this.header === null) {
-      encoder.writeNil();
-    } else {
-      const headerMap = this.header!;
-      encoder.writeMapSize(headerMap.size);
-      const headerKeys = headerMap.keys();
-      for (let i: i32 = 0; i < headerKeys.length; i++) {
-        const key = headerKeys[i];
-        const value = headerMap.get(key);
+    encoder.writeMap(
+      this.header,
+      (encoder: Encoder, key: string): void => {
         encoder.writeString(key);
+      },
+      (encoder: Encoder, value: string): void => {
         encoder.writeString(value);
       }
-    }
+    );
     encoder.writeString("body");
     encoder.writeByteArray(this.body);
   }
@@ -210,7 +197,7 @@ export class RequestBuilder {
     return this;
   }
 
-  withHeader(header: Map<string, string> | null): RequestBuilder {
+  withHeader(header: Map<string, string>): RequestBuilder {
     this.instance.header = header;
     return this;
   }
@@ -234,14 +221,15 @@ export class Response {
   status: string;
 
   // The HTTP request headers.
-  header: Map<string, string> | null;
+  header: Map<string, string>;
 
   // Happiness
   body: ArrayBuffer;
 
   constructor() {
-    this.statusCode = 0;
-    this.status = "";
+    this.statusCode = 200;
+    this.status = "OK";
+    this.header = new Map<string, string>();
     this.body = new ArrayBuffer(0);
   }
 
@@ -267,17 +255,14 @@ export class Response {
       } else if (field == "status") {
         this.status = decoder.readString();
       } else if (field == "header") {
-        if (decoder.isNextNil()) {
-          this.header = null;
-        } else {
-          const mapSize = decoder.readMapSize();
-          this.header = new Map<string, string>();
-          for (let i: u32 = 0; i < mapSize; i++) {
-            const key = decoder.readString();
-            const value = decoder.readString();
-            this.header.set(key, value);
+        this.header = decoder.readMap(
+          (decoder: Decoder): string => {
+            return decoder.readString();
+          },
+          (decoder: Decoder): string => {
+            return decoder.readString();
           }
-        }
+        );
       } else if (field == "body") {
         this.body = decoder.readByteArray();
       } else {
@@ -293,19 +278,15 @@ export class Response {
     sizer.writeString("status");
     sizer.writeString(this.status);
     sizer.writeString("header");
-    if (this.header === null) {
-      sizer.writeNil();
-    } else {
-      const headerMap = this.header!;
-      sizer.writeMapSize(headerMap.size);
-      const headerKeys = headerMap.keys();
-      for (let i: i32 = 0; i < headerKeys.length; i++) {
-        const key = headerKeys[i];
-        const value = headerMap.get(key);
+    sizer.writeMap(
+      this.header,
+      (sizer: Sizer, key: string): void => {
         sizer.writeString(key);
+      },
+      (sizer: Sizer, value: string): void => {
         sizer.writeString(value);
       }
-    }
+    );
     sizer.writeString("body");
     sizer.writeByteArray(this.body);
   }
@@ -317,19 +298,15 @@ export class Response {
     encoder.writeString("status");
     encoder.writeString(this.status);
     encoder.writeString("header");
-    if (this.header === null) {
-      encoder.writeNil();
-    } else {
-      const headerMap = this.header!;
-      encoder.writeMapSize(headerMap.size);
-      const headerKeys = headerMap.keys();
-      for (let i: i32 = 0; i < headerKeys.length; i++) {
-        const key = headerKeys[i];
-        const value = headerMap.get(key);
+    encoder.writeMap(
+      this.header,
+      (encoder: Encoder, key: string): void => {
         encoder.writeString(key);
+      },
+      (encoder: Encoder, value: string): void => {
         encoder.writeString(value);
       }
-    }
+    );
     encoder.writeString("body");
     encoder.writeByteArray(this.body);
   }
@@ -361,7 +338,7 @@ export class ResponseBuilder {
     return this;
   }
 
-  withHeader(header: Map<string, string> | null): ResponseBuilder {
+  withHeader(header: Map<string, string>): ResponseBuilder {
     this.instance.header = header;
     return this;
   }
